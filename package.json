@@ -1,10 +1,22 @@
-﻿{
+{
   "name": "gsearch",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "GSearch — a unified CAD model search engine aggregating 9 platforms",
+  "private": false,
+  "license": "MIT",
+  "author": "Swagat Baghel <swagat27@github.com>",
+  "homepage": "https://swagat27.github.io/gsearch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swagat27/gsearch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/swagat27/gsearch/issues"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": "next build",
     "start": "next start",
     "lint": "eslint"
   },
