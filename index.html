@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GSearch — Unified CAD Model Search Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+      border-bottom: 1px solid #30363d;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      color: #58a6ff;
+      letter-spacing: -1px;
+    }
+    header p {
+      color: #8b949e;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+    .search-wrapper {
+      max-width: 700px;
+      margin: 2.5rem auto;
+      padding: 0 1rem;
+    }
+    .search-box {
+      display: flex;
+      gap: 0.5rem;
+    }
+    input[type=text] {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #c9d1d9;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type=text]:focus { border-color: #58a6ff; }
+    button {
+      padding: 0.75rem 1.5rem;
+      background: #238636;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #2ea043; }
+    .platforms {
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+    }
+    .platforms h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #58a6ff;
+      font-size: 1.3rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 1.2rem;
+      text-align: center;
+      text-decoration: none;
+      color: #c9d1d9;
+      transition: border-color 0.2s, transform 0.2s;
+      display: block;
+    }
+    .card:hover {
+      border-color: #58a6ff;
+      transform: translateY(-2px);
+    }
+    .card .icon { font-size: 2rem; margin-bottom: 0.4rem; }
+    .card .name { font-weight: 600; color: #e6edf3; }
+    .card .desc { font-size: 0.8rem; color: #8b949e; margin-top: 0.3rem; }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid #30363d;
+      color: #8b949e;
+      font-size: 0.9rem;
+    }
+    footer a { color: #58a6ff; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>&#128269; GSearch</h1>
+    <p>Unified CAD Model Search &mdash; Aggregating 9 platforms in one place</p>
+  </header>
+
+  <div class="search-wrapper">
+    <div class="search-box">
+      <input type="text" id="query" placeholder="Search CAD models... e.g. gear, bracket, engine mount" />
+      <button onclick="doSearch()">Search</button>
+    </div>
+  </div>
+
+  <div class="platforms">
+    <h2>&#127760; Search Across All Platforms</h2>
+    <div class="grid" id="cards"></div>
+  </div>
+
+  <footer>
+    Made with &#10084;&#65039; by <a href="https://github.com/swagat27">Swagat Baghel</a> &middot; IIT Bhilai
+    &nbsp;|&nbsp;
+    <a href="https://github.com/swagat27/gsearch">View on GitHub</a>
+  </footer>
+
+  <script>
+    const PLATFORMS = [
+      { name: 'GrabCAD',        icon: '&#128736;', desc: 'CAD community', url: 'https://grabcad.com/library?query=' },
+      { name: 'Thingiverse',    icon: '&#128424;', desc: '3D print models', url: 'https://www.thingiverse.com/search?q=' },
+      { name: 'Sketchfab',      icon: '&#127903;', desc: '3D & AR/VR models', url: 'https://sketchfab.com/search?q=' },
+      { name: 'TraceParts',     icon: '&#9881;',   desc: 'CAD components', url: 'https://www.traceparts.com/en/search?text=' },
+      { name: 'MyMiniFactory',  icon: '&#127381;', desc: 'Curated 3D objects', url: 'https://www.myminifactory.com/search/?query=' },
+      { name: 'Printables',     icon: '&#128247;', desc: 'Prusa community', url: 'https://www.printables.com/search/models?q=' },
+      { name: 'Cults3D',        icon: '&#128161;', desc: 'Creator marketplace', url: 'https://cults3d.com/en/recherche?q=' },
+      { name: 'Free3D',         icon: '&#127775;', desc: 'Free 3D downloads', url: 'https://free3d.com/3d-models/' },
+      { name: 'CGTrader',       icon: '&#128176;', desc: 'Professional models', url: 'https://www.cgtrader.com/3d-models?keywords=' }
+    ];
+
+    const grid = document.getElementById('cards');
+    PLATFORMS.forEach(p => {
+      const a = document.createElement('a');
+      a.className = 'card';
+      a.href = '#';
+      a.dataset.url = p.url;
+      a.innerHTML = `<div class="icon">${p.icon}</div><div class="name">${p.name}</div><div class="desc">${p.desc}</div>`;
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const q = document.getElementById('query').value.trim();
+        if (q) window.open(p.url + encodeURIComponent(q), '_blank');
+        else alert('Please enter a search term first!');
+      });
+      grid.appendChild(a);
+    });
+
+    function doSearch() {
+      const q = document.getElementById('query').value.trim();
+      if (!q) { alert('Please enter a search term!'); return; }
+      PLATFORMS.forEach(p => window.open(p.url + encodeURIComponent(q), '_blank'));
+    }
+
+    document.getElementById('query').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doSearch();
+    });
+  </script>
+</body>
+</html>
