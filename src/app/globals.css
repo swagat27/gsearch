@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --paper: #f7f6f2;
+  --panel: #fdfcfa;
+  --ink: #101418;
+  --ink-soft: #3c434b;
+  --muted: #6d7278;
+  --line: #ddd9cc;
+  --line-strong: #c9c4b2;
+  --accent: #ea580c;
+  --accent-ink: #c2410c;
+  --danger: #b3261e;
+  --note: #8a5a00;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,8 +23,38 @@
 }
 
 body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  background: #0d1117;
-  color: #c9d1d9;
+  font-family: var(--font-display), 'Space Grotesk', system-ui, sans-serif;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(to right, rgba(16, 20, 24, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 20, 24, 0.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--ink);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display), 'Space Grotesk', system-ui, sans-serif;
+}
+
+.font-spec {
+  font-family: var(--font-mono), 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.micro-label {
+  font-family: var(--font-mono), 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

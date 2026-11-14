@@ -104,6 +104,15 @@ function buildUrl(platform: Platform, query: string, format: string): string {
   return platform.baseUrl + encodeURIComponent(q);
 }
 
+function platformMark(name: string): string {
+  const caps = name.replace(/[^A-Z0-9]/g, '');
+  return (caps || name.slice(0, 2).toUpperCase()).slice(0, 3);
+}
+
+function indexLabel(index: number): string {
+  return String(index + 1).padStart(2, '0');
+}
+
 export default function Home() {
   const [query, setQuery] = useState('');
   const [format, setFormat] = useState('');
@@ -211,17 +220,46 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <header className="bg-gradient-to-br from-[#161b22] to-[#0d1117] border-b border-[#30363d] p-8 text-center">
-        <h1 className="text-4xl font-bold text-[#58a6ff] tracking-tight">GSearch</h1>
-        <p className="text-[#8b949e] mt-2 text-base">
+    <div className="text-[#101418]">
+      <header className="max-w-[960px] mx-auto px-5 pt-10">
+        <div className="flex items-baseline justify-between gap-4 border-b-2 border-[#101418] pb-3">
+          <span className="micro-label text-[#6d7278]">CAD Model Index</span>
+          <span className="micro-label text-[#6d7278]">Sheet 01 / 01</span>
+        </div>
+        <div className="flex items-center gap-4 mt-8">
+          <span
+            aria-hidden="true"
+            className="font-spec hidden sm:flex h-14 w-14 shrink-0 items-center justify-center border-2 border-[#101418] text-lg font-semibold bg-[#fdfcfa]"
+          >
+            G<span className="text-[#ea580c]">/</span>S
+          </span>
+          <h1 className="font-display text-5xl md:text-6xl font-bold tracking-tight leading-none">
+            GSearch
+          </h1>
+        </div>
+        <p className="font-spec mt-5 text-sm md:text-[15px] text-[#3c434b] max-w-[620px] leading-relaxed">
           Unified CAD model search: one query, deep links into 9 model platforms.
         </p>
+        <dl className="mt-8 grid grid-cols-3 border-y border-[#ddd9cc] divide-x divide-[#ddd9cc]">
+          <div className="py-3 pr-4">
+            <dt className="micro-label text-[#6d7278]">Platforms</dt>
+            <dd className="font-spec mt-1 text-xl font-semibold">09</dd>
+          </div>
+          <div className="py-3 px-4">
+            <dt className="micro-label text-[#6d7278]">Formats</dt>
+            <dd className="font-spec mt-1 text-xl font-semibold">07</dd>
+          </div>
+          <div className="py-3 pl-4">
+            <dt className="micro-label text-[#6d7278]">Models hosted</dt>
+            <dd className="font-spec mt-1 text-xl font-semibold">00</dd>
+          </div>
+        </dl>
       </header>
 
-      <main className="max-w-[900px] mx-auto px-4">
-        <section aria-label="Search CAD models" className="my-10">
-          <form onSubmit={handleSubmit} className="flex gap-2" noValidate>
+      <main className="max-w-[960px] mx-auto px-5">
+        <section aria-label="Search CAD models" className="my-12">
+          <p className="micro-label text-[#c2410c] mb-3">01 · Query</p>
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3" noValidate>
             <label htmlFor="gsearch-query" className="sr-only">
               Search CAD models
             </label>
@@ -233,33 +271,37 @@ export default function Home() {
               placeholder="Search CAD models, e.g. gear, bracket, engine mount"
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? 'gsearch-error' : undefined}
-              className="flex-1 p-3 bg-[#161b22] border border-[#30363d] rounded-lg text-[#c9d1d9] outline-none transition-colors focus:border-[#58a6ff]"
+              className="font-spec flex-1 px-5 py-4 bg-[#fdfcfa] border-[1.5px] border-[#101418] rounded-[4px] text-base text-[#101418] placeholder:text-[#6d7278] outline-none transition-colors duration-150 focus:border-[#ea580c]"
             />
             <button
               type="submit"
-              className="px-6 bg-[#238636] text-white border-0 rounded-lg cursor-pointer transition-colors hover:bg-[#2ea043]"
+              className="micro-label px-8 py-4 bg-[#101418] text-[#f7f6f2] border-[1.5px] border-[#101418] rounded-[4px] cursor-pointer transition-colors duration-150 hover:bg-[#ea580c] hover:border-[#ea580c]"
             >
               Search
             </button>
           </form>
 
           {error && (
-            <p id="gsearch-error" role="alert" className="mt-3 text-sm text-[#f85149]">
+            <p
+              id="gsearch-error"
+              role="alert"
+              className="mt-3 text-sm text-[#b3261e] border-l-2 border-[#b3261e] pl-3"
+            >
               {error}
             </p>
           )}
 
-          <div className="mt-5">
-            <span className="text-sm text-[#8b949e] mr-2">Format:</span>
+          <div className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="micro-label text-[#6d7278]">Format</span>
             <div className="inline-flex flex-wrap gap-2 align-middle" role="group" aria-label="Filter by file format">
               <button
                 type="button"
                 onClick={() => setFormat('')}
                 aria-pressed={format === ''}
-                className={`px-3 py-1.5 rounded-full border text-sm cursor-pointer transition-colors ${
+                className={`font-spec px-3 py-1.5 rounded-[4px] border text-[13px] cursor-pointer transition-colors duration-150 ${
                   format === ''
-                    ? 'bg-[#1f6feb] border-[#1f6feb] text-white'
-                    : 'bg-[#161b22] border-[#30363d] text-[#c9d1d9] hover:border-[#58a6ff]'
+                    ? 'bg-[#101418] border-[#101418] text-[#f7f6f2]'
+                    : 'bg-transparent border-[#c9c4b2] text-[#3c434b] hover:border-[#101418] hover:text-[#101418]'
                 }`}
               >
                 Any format
@@ -270,10 +312,10 @@ export default function Home() {
                   type="button"
                   onClick={() => setFormat(f)}
                   aria-pressed={format === f}
-                  className={`px-3 py-1.5 rounded-full border text-sm cursor-pointer transition-colors ${
+                  className={`font-spec px-3 py-1.5 rounded-[4px] border text-[13px] cursor-pointer transition-colors duration-150 ${
                     format === f
-                      ? 'bg-[#1f6feb] border-[#1f6feb] text-white'
-                      : 'bg-[#161b22] border-[#30363d] text-[#c9d1d9] hover:border-[#58a6ff]'
+                      ? 'bg-[#101418] border-[#101418] text-[#f7f6f2]'
+                      : 'bg-transparent border-[#c9c4b2] text-[#3c434b] hover:border-[#101418] hover:text-[#101418]'
                   }`}
                 >
                   {f}
@@ -282,15 +324,15 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-4">
-            <span className="text-sm text-[#8b949e] mr-2">Try:</span>
+          <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="micro-label text-[#6d7278]">Try</span>
             <div className="inline-flex flex-wrap gap-2 align-middle">
               {EXAMPLES.map((example) => (
                 <button
                   key={example}
                   type="button"
                   onClick={() => handleExample(example)}
-                  className="px-3 py-1.5 rounded-full bg-[#21262d] border border-[#30363d] text-sm text-[#c9d1d9] cursor-pointer transition-colors hover:border-[#58a6ff]"
+                  className="font-spec px-3 py-1.5 rounded-[4px] bg-transparent border border-[#ddd9cc] text-[13px] text-[#3c434b] cursor-pointer transition-colors duration-150 hover:border-[#ea580c] hover:text-[#c2410c]"
                 >
                   {example}
                 </button>
@@ -299,15 +341,15 @@ export default function Home() {
           </div>
 
           {recent.length > 0 && (
-            <div className="mt-4">
-              <span className="text-sm text-[#8b949e] mr-2">Recent:</span>
+            <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span className="micro-label text-[#6d7278]">Recent</span>
               <div className="inline-flex flex-wrap gap-2 align-middle">
                 {recent.map((entry) => (
                   <button
                     key={`${entry.query}|${entry.format}`}
                     type="button"
                     onClick={() => handleRecentClick(entry)}
-                    className="px-3 py-1.5 rounded-full bg-[#21262d] border border-[#30363d] text-sm text-[#c9d1d9] cursor-pointer transition-colors hover:border-[#58a6ff]"
+                    className="font-spec px-3 py-1.5 rounded-[4px] bg-[#fdfcfa] border border-[#ddd9cc] text-[13px] text-[#3c434b] cursor-pointer transition-colors duration-150 hover:border-[#101418] hover:text-[#101418]"
                   >
                     {entry.format ? `${entry.query} (${entry.format})` : entry.query}
                   </button>
@@ -315,7 +357,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={clearRecent}
-                  className="px-3 py-1.5 rounded-full bg-transparent border border-[#30363d] text-sm text-[#8b949e] cursor-pointer transition-colors hover:border-[#f85149] hover:text-[#f85149]"
+                  className="micro-label px-2 py-1.5 bg-transparent border-0 text-[#6d7278] cursor-pointer transition-colors duration-150 hover:text-[#b3261e]"
                 >
                   Clear
                 </button>
@@ -325,55 +367,87 @@ export default function Home() {
         </section>
 
         {submitted && (
-          <section ref={resultsRef} aria-label="Search results by platform" className="mb-12">
-            <h2 className="text-[#58a6ff] text-xl mb-2">
-              Results for &quot;{effectiveQuery(submitted.query, submitted.format)}&quot;
+          <section ref={resultsRef} aria-label="Search results by platform" className="mb-14">
+            <p className="micro-label text-[#c2410c] mb-3">02 · Index of results</p>
+            <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight">
+              Results for{' '}
+              <span className="font-spec font-medium">
+                &quot;{effectiveQuery(submitted.query, submitted.format)}&quot;
+              </span>
             </h2>
-            <p className="text-sm text-[#8b949e] mb-4">
+            <p className="text-sm text-[#6d7278] mt-2 max-w-[620px] leading-relaxed">
               GSearch does not host models. Each card below runs your exact query on that platform.
             </p>
             <button
               type="button"
               onClick={handleOpenAll}
-              className="mb-4 px-5 py-2.5 bg-[#238636] text-white border-0 rounded-lg cursor-pointer transition-colors hover:bg-[#2ea043]"
+              className="micro-label mt-5 px-6 py-3 bg-[#ea580c] text-white border-[1.5px] border-[#ea580c] rounded-[4px] cursor-pointer transition-colors duration-150 hover:bg-[#101418] hover:border-[#101418]"
             >
               Open all 9 platforms
             </button>
             {showPopupNote && (
-              <p role="status" className="mb-4 text-sm text-[#d29922]">
+              <p
+                role="status"
+                className="mt-4 text-sm text-[#8a5a00] border-l-2 border-[#ea580c] pl-3 max-w-[620px] leading-relaxed"
+              >
                 Opening 9 tabs in sequence. Your browser may block some of these popups, in which
                 case use the &quot;Open results&quot; button on each card below, that is always a
                 way in.
               </p>
             )}
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
-              {PLATFORMS.map((platform) => {
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4 mt-6">
+              {PLATFORMS.map((platform, index) => {
                 const url = buildUrl(platform, submitted.query, submitted.format);
                 return (
                   <article
                     key={platform.name}
-                    className="bg-[#161b22] border border-[#30363d] rounded-xl p-5"
+                    className="group bg-[#fdfcfa] border border-[#ddd9cc] rounded-[6px] p-5 transition-colors duration-150 hover:border-[#101418]"
                   >
-                    <h3 className="font-semibold text-[#e6edf3]">{platform.name}</h3>
-                    <p className="text-sm text-[#8b949e] mt-1">{platform.desc}</p>
-                    <p className="text-sm text-[#c9d1d9] mt-3">
-                      Query:{' '}
-                      <span className="font-mono text-[#58a6ff]">
+                    <div className="flex items-start justify-between gap-3">
+                      <span
+                        aria-hidden="true"
+                        className="font-spec flex h-10 w-10 shrink-0 items-center justify-center border border-[#101418] text-[13px] font-semibold bg-[#f7f6f2]"
+                      >
+                        {platformMark(platform.name)}
+                      </span>
+                      <span className="font-spec text-sm text-[#6d7278] transition-colors duration-150 group-hover:text-[#ea580c]">
+                        {indexLabel(index)}
+                      </span>
+                    </div>
+                    <h3 className="font-display font-semibold text-lg text-[#101418] mt-4">
+                      {platform.name}
+                    </h3>
+                    <p className="text-sm text-[#6d7278] mt-1 leading-relaxed">{platform.desc}</p>
+                    <p className="mt-4">
+                      <span className="micro-label text-[#6d7278] block mb-1">Query</span>
+                      <span className="font-spec text-sm text-[#101418]">
                         {effectiveQuery(submitted.query, submitted.format)}
                       </span>
                     </p>
-                    <p className="text-xs text-[#8b949e] mt-1 font-mono break-all">{url}</p>
-                    <p className="text-sm text-[#8b949e] mt-3">
-                      Known for: {platform.formats.join(', ')}
+                    <p className="font-spec text-xs text-[#6d7278] mt-2 break-all leading-relaxed">
+                      {url}
+                    </p>
+                    <p className="mt-4">
+                      <span className="micro-label text-[#6d7278] block mb-1.5">Formats</span>
+                      <span className="inline-flex flex-wrap gap-1.5">
+                        {platform.formats.map((f) => (
+                          <span
+                            key={f}
+                            className="font-spec text-[11px] px-1.5 py-0.5 border border-[#ddd9cc] rounded-[3px] text-[#3c434b]"
+                          >
+                            {f}
+                          </span>
+                        ))}
+                      </span>
                     </p>
                     <a
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Open results for ${effectiveQuery(submitted.query, submitted.format)} on ${platform.name}`}
-                      className="inline-block mt-4 px-4 py-2 bg-[#1f6feb] text-white rounded-lg no-underline text-sm transition-colors hover:bg-[#388bfd]"
+                      className="font-spec inline-block mt-5 text-[13px] font-medium text-[#101418] no-underline border-b-2 border-[#ea580c] pb-0.5 transition-colors duration-150 hover:text-[#c2410c]"
                     >
-                      Open results
+                      Open results →
                     </a>
                   </article>
                 );
@@ -382,81 +456,116 @@ export default function Home() {
           </section>
         )}
 
-        <section aria-label="Browse platforms" className="mb-12">
-          <h2 className="text-center mb-6 text-[#58a6ff] text-xl">Browse all 9 platforms</h2>
+        <section aria-label="Browse platforms" className="mb-14">
+          <p className="micro-label text-[#c2410c] mb-3">03 · Parts index</p>
+          <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight mb-6">
+            Browse all 9 platforms
+          </h2>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
-            {PLATFORMS.map((platform) => (
+            {PLATFORMS.map((platform, index) => (
               <button
                 key={platform.name}
                 type="button"
                 onClick={() => handleBrowseClick(platform)}
                 aria-label={`Search on ${platform.name}`}
-                className="bg-[#161b22] border border-[#30363d] rounded-xl p-5 text-center cursor-pointer transition-all hover:border-[#58a6ff] hover:-translate-y-0.5 text-left"
+                className="group bg-[#fdfcfa] border border-[#ddd9cc] rounded-[6px] p-5 cursor-pointer text-left transition-colors duration-150 hover:border-[#101418]"
               >
-                <div className="font-semibold text-[#e6edf3]">{platform.name}</div>
-                <div className="text-sm text-[#8b949e] mt-1">{platform.desc}</div>
-                <div className="text-xs text-[#8b949e] mt-2">
-                  Known for: {platform.formats.join(', ')}
+                <div className="flex items-start justify-between gap-3">
+                  <span
+                    aria-hidden="true"
+                    className="font-spec flex h-10 w-10 shrink-0 items-center justify-center border border-[#101418] text-[13px] font-semibold bg-[#f7f6f2]"
+                  >
+                    {platformMark(platform.name)}
+                  </span>
+                  <span className="font-spec text-sm text-[#6d7278] transition-colors duration-150 group-hover:text-[#ea580c]">
+                    {indexLabel(index)}
+                  </span>
+                </div>
+                <div className="font-display font-semibold text-[#101418] mt-4">{platform.name}</div>
+                <div className="text-sm text-[#6d7278] mt-1 leading-relaxed">{platform.desc}</div>
+                <div className="font-spec text-[11px] tracking-wide text-[#6d7278] mt-3">
+                  {platform.formats.join(' / ')}
                 </div>
               </button>
             ))}
           </div>
         </section>
 
-        <section aria-label="How GSearch works" className="mb-12">
-          <h2 className="text-center mb-6 text-[#58a6ff] text-xl">How it works</h2>
+        <section aria-label="How GSearch works" className="mb-14">
+          <p className="micro-label text-[#c2410c] mb-3">04 · Method</p>
+          <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight mb-6">
+            How it works
+          </h2>
           <ol className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 list-none">
-            <li className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
-              <div className="font-semibold text-[#e6edf3]">1. Type one query</div>
-              <p className="text-sm text-[#8b949e] mt-1">
+            <li className="border-t-2 border-[#101418] pt-4">
+              <div className="font-spec text-[#ea580c] text-sm font-semibold">01</div>
+              <div className="font-display font-semibold text-[#101418] mt-2">1. Type one query</div>
+              <p className="text-sm text-[#6d7278] mt-1 leading-relaxed">
                 Enter what you need, and optionally pick a file format such as STEP or STL.
               </p>
             </li>
-            <li className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
-              <div className="font-semibold text-[#e6edf3]">2. Review the dashboard</div>
-              <p className="text-sm text-[#8b949e] mt-1">
+            <li className="border-t-2 border-[#101418] pt-4">
+              <div className="font-spec text-[#ea580c] text-sm font-semibold">02</div>
+              <div className="font-display font-semibold text-[#101418] mt-2">
+                2. Review the dashboard
+              </div>
+              <p className="text-sm text-[#6d7278] mt-1 leading-relaxed">
                 See one card per platform with the exact query it will run and the formats it is
                 known for.
               </p>
             </li>
-            <li className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
-              <div className="font-semibold text-[#e6edf3]">3. Open your results</div>
-              <p className="text-sm text-[#8b949e] mt-1">
+            <li className="border-t-2 border-[#101418] pt-4">
+              <div className="font-spec text-[#ea580c] text-sm font-semibold">03</div>
+              <div className="font-display font-semibold text-[#101418] mt-2">
+                3. Open your results
+              </div>
+              <p className="text-sm text-[#6d7278] mt-1 leading-relaxed">
                 Open a single platform, or all 9 in sequence, and download from the original site.
               </p>
             </li>
           </ol>
         </section>
 
-        <section aria-label="Supported formats" className="mb-12 text-center">
-          <h2 className="mb-4 text-[#58a6ff] text-xl">Supported formats</h2>
-          <div className="flex flex-wrap justify-center gap-2">
+        <section aria-label="Supported formats" className="mb-14">
+          <p className="micro-label text-[#c2410c] mb-3">05 · Specification</p>
+          <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight mb-5">
+            Supported formats
+          </h2>
+          <div className="flex flex-wrap gap-2">
             {FORMATS.map((f) => (
               <span
                 key={f}
-                className="px-3 py-1.5 rounded-full bg-[#21262d] border border-[#30363d] text-sm text-[#c9d1d9]"
+                className="font-spec px-3 py-1.5 rounded-[4px] bg-[#fdfcfa] border border-[#c9c4b2] text-[13px] text-[#101418]"
               >
                 {f}
               </span>
             ))}
           </div>
-          <p className="text-sm text-[#8b949e] mt-3">
+          <p className="text-sm text-[#6d7278] mt-4 leading-relaxed">
             Selecting a format adds it to the query sent to every platform, for example
             &quot;gear STEP&quot;.
           </p>
         </section>
       </main>
 
-      <footer className="text-center p-8 border-t border-[#30363d] text-[#8b949e] text-sm">
-        Built by Swagat Baghel, IIT BHILAI |{' '}
-        <a
-          href="https://github.com/swagat27/gsearch"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[#58a6ff] no-underline"
-        >
-          View on GitHub
-        </a>
+      <footer className="max-w-[960px] mx-auto px-5 pb-10">
+        <div className="border-t-2 border-[#101418] pt-5 flex flex-col md:flex-row md:items-baseline md:justify-between gap-3">
+          <p className="text-sm text-[#3c434b]">
+            Built by Swagat Baghel, IIT BHILAI{' '}
+            <span aria-hidden="true" className="text-[#c9c4b2]">
+              |
+            </span>{' '}
+            <a
+              href="https://github.com/swagat27/gsearch"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-spec text-[13px] text-[#101418] no-underline border-b-2 border-[#ea580c] pb-0.5 transition-colors duration-150 hover:text-[#c2410c]"
+            >
+              View on GitHub
+            </a>
+          </p>
+          <p className="micro-label text-[#6d7278]">GSearch · Static site · No models hosted</p>
+        </div>
       </footer>
     </div>
   );
