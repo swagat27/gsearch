@@ -51,10 +51,6 @@
 body {
   font-family: var(--font-display), 'Space Grotesk', system-ui, sans-serif;
   background-color: var(--paper);
-  background-image:
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: 28px 28px;
   color: var(--ink);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -92,18 +88,18 @@ body {
   display: flex;
   align-items: center;
   background: var(--panel);
-  border: 1.5px solid var(--ink);
-  border-radius: 4px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .search-field:hover {
-  box-shadow: 0 2px 12px var(--shadow-soft);
+  box-shadow: 0 2px 10px var(--shadow-soft);
 }
 
 .search-field:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 8px 28px var(--shadow-strong);
+  box-shadow: 0 4px 18px var(--shadow-soft);
 }
 
 .search-field input {
