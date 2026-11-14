@@ -1,7 +1,7 @@
 # GSearch
 
 <p align="center">
-  <strong>A unified CAD model search engine — search 9 platforms in one click.</strong>
+  <strong>A unified CAD model search dashboard: one query, deep links into 9 platforms.</strong>
 </p>
 
 <p align="center">
@@ -15,62 +15,63 @@
 
 ## About
 
-**GSearch** is an open-source, browser-based CAD model search engine built with **Next.js 15**, **React 19**, and **Tailwind CSS**. It aggregates free 3D models from **9 major platforms in parallel** — eliminating the need to manually search each site.
+**GSearch** is an open-source, browser-based CAD model search dashboard built with **Next.js 15**, **React 19**, and **Tailwind CSS 4**. Instead of opening 9 sites and typing the same query into each one, you type once in GSearch and it builds the exact search link for every platform.
 
-Results are fetched simultaneously via `Promise.allSettled`, so no slow source ever blocks the UI. HTML scraping is best-effort with automatic fallback to direct search links.
+GSearch is honest about what it does: it is a deep link aggregator. It does not scrape any platform, it does not call any platform API, and it does not host or copy any models. Every result opens on the original platform, in a new tab.
 
-**Built by [Swagat Baghel](https://github.com/swagat27) · IIT Bhilai**
+**Built by [Swagat Baghel](https://github.com/swagat27), IIT BHILAI**
 
 ---
 
 ## Features
 
-- **9-Platform Parallel Search** — one query, all results at once
-- **Format Filters** — narrow down by `.STEP`, `.STL`, `.OBJ`, and more
-- **Direct Source Links** — links go straight to the original platform
-- **Fast & Non-blocking** — `Promise.allSettled` keeps UI responsive
-- **Auto-fallback** — if scraping fails, falls back to a search redirect
-- **Fully Static** — no backend, no database, deploys anywhere
-- **Responsive UI** — works on desktop and mobile
+- **One query, 9 platforms**: an in-page results dashboard with one card per platform
+- **Format-aware queries**: pick STEP, STL, OBJ, 3MF, IGES, FBX, or GLTF, and the format is added to the query sent to every platform, for example "gear STEP"
+- **Exact query preview**: every card shows the query and the full search URL it will run before you click
+- **Open one or open all**: open a single platform from its card, or open all 9 in sequence (your browser may block some popups, the cards always work)
+- **Quick examples**: one click fills the search box with Gear, Engine mount, Bracket, Drone frame, Enclosure, or Pulley
+- **Recent searches**: your last 8 searches (query plus format) are stored in your browser (localStorage) and can be re-run or cleared
+- **Fully static**: no backend, no database, no tracking, nothing to sign up for
+- **Responsive UI**: works on desktop and mobile
 
 ---
 
-## Aggregated Sources (9 Platforms)
+## Platforms (9)
 
-| # | Platform | Method | Formats |
-|---|----------|--------|---------|
-| 1 | [GrabCAD](https://grabcad.com) | HTML scrape + redirect fallback | STEP, IGES, SLDPRT, and more |
-| 2 | [Thingiverse](https://www.thingiverse.com) | HTML scrape + redirect fallback | STL, OBJ |
-| 3 | [MyMiniFactory](https://www.myminifactory.com) | Public API | STL, OBJ, 3MF |
-| 4 | [Sketchfab](https://sketchfab.com) | Public API | GLTF, GLB, FBX, OBJ |
-| 5 | [TraceParts](https://www.traceparts.com) | Search redirect fallback | STEP, IGES, DXF |
-| 6 | [3DContentCentral](https://www.3dcontentcentral.com) | Search redirect fallback | STEP, IGES, DWG |
-| 7 | [NASA 3D Resources](https://nasa3d.arc.nasa.gov) | Search redirect fallback | OBJ, STL |
-| 8 | [NIH 3D Print Exchange](https://3dprint.nih.gov) | Search redirect fallback | STL, OBJ |
-| 9 | [Printables](https://www.printables.com) | Search redirect fallback | STL, 3MF |
+| # | Platform | What it is known for | Formats it is known for |
+|---|----------|----------------------|-------------------------|
+| 1 | [GrabCAD](https://grabcad.com) | CAD community library | STEP, IGES, STL |
+| 2 | [Thingiverse](https://www.thingiverse.com) | 3D printable designs | STL, OBJ, 3MF |
+| 3 | [Printables](https://www.printables.com) | Prusa community library | STL, 3MF, OBJ |
+| 4 | [MyMiniFactory](https://www.myminifactory.com) | Curated 3D printable objects | STL, OBJ, 3MF |
+| 5 | [Sketchfab](https://sketchfab.com) | 3D, AR and VR models | GLTF, FBX, OBJ |
+| 6 | [TraceParts](https://www.traceparts.com) | Professional CAD components | STEP, IGES |
+| 7 | [Cults3D](https://cults3d.com) | Creator marketplace | STL, OBJ, 3MF |
+| 8 | [CGTrader](https://www.cgtrader.com) | Professional model marketplace | FBX, OBJ, STL |
+| 9 | [Free3D](https://free3d.com) | Free 3D model downloads | FBX, OBJ, STL |
+
+Note: Free3D search URLs are slug based, so GSearch converts the query into a hyphenated slug for that platform, for example "engine mount" becomes "engine-mount".
 
 ---
 
 ## Supported File Formats
 
-| Category | Formats |
-|----------|---------|
-| CAD | `.STEP` `.IGES` `.SLDPRT` `.SLDASM` `.IPT` `.IAM` `.CATPART` |
-| 3D Print | `.STL` `.OBJ` `.3MF` `.AMF` |
-| Mesh / Render | `.FBX` `.GLTF` `.GLB` `.DAE` `.PLY` |
-| 2D / Drawing | `.DXF` `.DWG` |
+The format filter supports: **STEP, STL, OBJ, 3MF, IGES, FBX, GLTF**.
+
+Selecting a format does not filter a central index (there is none). It appends the format to the query, so each platform searches its own library for models matching both your term and that format.
 
 ---
 
 ## Tech Stack
 
 | Technology | Version | Purpose |
-|------------|---------|----------|
+|------------|---------|---------|
 | Next.js | 15.x | Framework (static export) |
 | React | 19.x | UI library |
 | TypeScript | 5.x | Type safety |
 | Tailwind CSS | 4.x | Styling |
-| Cheerio | 1.x | HTML scraping |
+
+There is no scraping library and no server code. The whole app runs in the browser.
 
 ---
 
@@ -87,10 +88,10 @@ Results are fetched simultaneously via `Promise.allSettled`, so no slow source e
 git clone https://github.com/swagat27/gsearch.git
 cd gsearch
 
-# 2. Install dependencies
-npm install
+# 2. Install dependencies (exact versions from the lockfile)
+npm ci
 
-# 3. Start development server
+# 3. Start the development server
 npm run dev
 # Visit http://localhost:3000/gsearch
 
@@ -103,14 +104,14 @@ npm run build
 
 ## Deployment
 
-This project deploys automatically to **GitHub Pages** via GitHub Actions on every push to `main`.
+This project deploys automatically to **GitHub Pages** via GitHub Actions on every push to `main`, using the static export in the `out` folder.
 
 Live at: **https://swagat27.github.io/gsearch**
 
 To deploy your own fork:
 1. Fork the repo
-2. Go to Settings > Pages > Source: GitHub Actions
-3. Push any change to `main` — it deploys automatically
+2. Go to Settings, then Pages, and set Source to GitHub Actions
+3. Push any change to `main`, it deploys automatically
 
 ---
 
@@ -139,6 +140,7 @@ This project is open-source under the **[MIT License](LICENSE)**.
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://github.com/swagat27"><strong>Swagat Baghel</strong></a> &nbsp;&middot;&nbsp; IIT Bhilai &nbsp;&middot;&nbsp;
-  <a href="https://swagat27.github.io/gsearch">Live Demo</a>
+  Built by <a href="https://github.com/swagat27"><strong>Swagat Baghel</strong></a>, IIT BHILAI &middot;
+  <a href="https://swagat27.github.io/gsearch">Live Demo</a> &middot;
+  <a href="https://github.com/swagat27/gsearch">GitHub Repo</a>
 </p>

@@ -1,7 +1,7 @@
 {
   "name": "gsearch",
   "version": "1.0.0",
-  "description": "GSearch — a unified CAD model search engine aggregating 9 platforms",
+  "description": "GSearch: a unified CAD model search engine aggregating 9 platforms",
   "private": false,
   "license": "MIT",
   "author": "Swagat Baghel <swagat27@github.com>",
@@ -21,7 +21,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "cheerio": "^1.2.0",
     "next": "^15.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"

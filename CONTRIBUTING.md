@@ -1,6 +1,6 @@
 # Contributing to GSearch
 
-Thank you for your interest in contributing! GSearch is open-source and welcomes all contributions — bug fixes, new platforms, UI improvements, and documentation.
+Thank you for your interest in contributing! GSearch is open-source and welcomes all contributions: bug fixes, new platforms, UI improvements, and documentation.
 
 ---
 
